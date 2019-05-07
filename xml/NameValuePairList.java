@@ -47,27 +47,27 @@ public class NameValuePairList {
     public void add(xml.unoptimized.NameValuePair nvp){
         nvps.add(new NameValuePair(nvp.getName(), nvp.getValue()));
     }
-    public void add(byte[] buffer, int nameStart, int nameEnd, int valueStart, int valueEnd){
-        int nameIndex = getIndex(buffer, nameStart,nameEnd);
-        int valueIndex = getIndex(buffer,valueStart,valueEnd);
+    public void add(byte[] buffer, int nameStart, int nameLength, int valueStart, int valueLength){
+        int nameIndex = getIndex(buffer, nameStart,nameLength);
+        int valueIndex = getIndex(buffer,valueStart,valueLength);
         if(nameIndex == -1 || valueIndex == -1){
             if(nameIndex ==-1 && valueIndex == -1){
-                String nameString = new String(buffer, nameStart, nameEnd);
-                String valueString = new String(buffer, valueStart, valueEnd);
+                String nameString = new String(buffer, nameStart, nameLength);
+                String valueString = new String(buffer, valueStart, valueLength);
                 nvps.add(new NameValuePair(nameString,valueString));
             }
             else if(valueIndex == -1){
                 nvps.add(
                         new NameValuePair(
                                 nameIndex,
-                                new String(buffer, nameStart,nameEnd)
+                                new String(buffer, valueStart,valueLength)
                         )
                 );
             }
             else if(nameIndex ==-1){
                 nvps.add(
                         new NameValuePair(
-                            new String(buffer, nameStart,nameEnd),
+                            new String(buffer, nameStart,nameLength),
                             valueIndex
                         )
                 );
@@ -80,9 +80,9 @@ public class NameValuePairList {
         }
 
     }
-    private int getIndex(byte[] buffer, int start, int end){
+    private int getIndex(byte[] buffer, int start, int length){
         String s;
-        int stringLength = end-start;
+        int stringLength = length;
         for(int string = 0; string< values.length; string++){//find string in predetermined strings
 
             s = values[string];
@@ -98,6 +98,13 @@ public class NameValuePairList {
         return -1;
     }
 
+    public String toString() {
+    	String retu = "{";
+    	for(int i = 0; i<nvps.size(); i++) {
+    		retu += nvps.get(i)+",";
+    	}
+    	return retu +"}";
+    }
     class NameValuePair implements xml.unoptimized.NameValuePair {
         int name = -1,value = -1;
         String nameString, valueString;
@@ -147,6 +154,9 @@ public class NameValuePairList {
                 throw new IndexOutOfBoundsException("value not set correctly");
             }
             return value;
+        }
+        public String toString() {
+        	return getName()+":"+getValue();
         }
     }
 
