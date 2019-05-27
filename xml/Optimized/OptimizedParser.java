@@ -84,7 +84,12 @@ public class OptimizedParser {
 
 
     private int backedUpEndIndex = 0;
-    private int readSingleByte() throws IOException {
+    /**
+     * 
+     * @return int representation of the byte read
+     * @throws IOException
+     */
+    protected int readSingleByte() throws IOException {
         if(backedUpArrayIndex+1>=backedUpArray.length){//if the array needs to grow
             byte[] newArray = new byte[backedUpArray.length+200];
             for(int i = 0; i<backedUpArray.length; i++){
@@ -510,14 +515,15 @@ public class OptimizedParser {
     }
     /**
      *
-     * @param String
+     * @param String the first character index of the string
      * @return returns last byte read in the string literal
      */
-    private byte skipOverStringLiteral(int String) throws IOException {
+    protected byte skipOverStringLiteral(int String) throws IOException {
 
-
-        int c;
-        if(backedUpArray[String] == '"'){
+    	backedUpArrayIndex = String;
+    	
+        int c = readSingleByte();
+        if(c == '"'){
             while(true){
                 int b = readSingleByte();
                 if(b == -1){
@@ -536,7 +542,7 @@ public class OptimizedParser {
             }
             return backedUpArray[backedUpArrayIndex];
         }
-        else if(backedUpArray[String] == '\''){
+        else if(c  == '\''){
             while(true){
                 int b = readSingleByte();
                 if(b == -1){
@@ -555,7 +561,12 @@ public class OptimizedParser {
             }
             return backedUpArray[backedUpArrayIndex];
         }
-        else throw new IndexOutOfBoundsException("not a string literal");
+        
+        else {
+        	Log.i("char", ""+((char)backedUpArray[String]));
+        	Log.i("parsing section", new String(backedUpArray, String, backedUpArray.length-String));
+        	throw new IndexOutOfBoundsException("not a string literal");
+        }
 
     }
 

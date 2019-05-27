@@ -18,6 +18,7 @@ import xml.XmlCursor;
 
 public class Parser2 extends xml.Optimized.OptimizedParser {
     private XmlCursor cursorUnoptimized;
+    protected boolean isHTML = false;
 
     public Parser2 (File f, XmlCursor curs, @Nullable String[] allStrings) throws FileNotFoundException{
         super(new FileInputStream(f), null, allStrings);
@@ -49,6 +50,9 @@ public class Parser2 extends xml.Optimized.OptimizedParser {
         shiftArray(end);
     }
 
+    protected void handleScriptTag( int start) throws Exception {
+    	
+    }
     @Override
     protected void closeElement(int start, int length) throws Exception {
         if(length<=0){
@@ -71,7 +75,8 @@ public class Parser2 extends xml.Optimized.OptimizedParser {
     protected void newElement(int start, int length, NameValuePairList attrs, boolean autoClose ) throws Exception {
         //int name = getStringIndex(start, backedUpArrayIndex - (start +2));
         if(length == 0){
-            throw new IndexOutOfBoundsException(new String(backedUpArray,start,1));
+        	Log.i("backed up array", new String(backedUpArray,0,backedUpArray.length));
+            throw new IndexOutOfBoundsException("backed up array:"+new String(backedUpArray,start,1));
         }
        
         
@@ -81,5 +86,9 @@ public class Parser2 extends xml.Optimized.OptimizedParser {
             throw new IndexOutOfBoundsException();
         }
         cursorUnoptimized.newElement(name, attrs, autoClose);
+
+        if(name.equals("script")) {
+        	handleScriptTag(start);
+        }
     }
 }

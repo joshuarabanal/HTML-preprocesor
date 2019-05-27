@@ -12,6 +12,9 @@ public class NameValuePairList {
         values = allPossibleValues;
         nvps = new ArrayList<NameValuePair>();
     }
+    public NameValuePairList() {
+    	this(new String[] {});
+    }
 
     public void clear(){
         nvps.clear();
@@ -46,6 +49,9 @@ public class NameValuePairList {
     }
     public void add(xml.unoptimized.NameValuePair nvp){
         nvps.add(new NameValuePair(nvp.getName(), nvp.getValue()));
+    }
+    public void add(String name, String value){
+        nvps.add(new NameValuePair(name, value));
     }
     public void add(byte[] buffer, int nameStart, int nameLength, int valueStart, int valueLength){
         int nameIndex = getIndex(buffer, nameStart,nameLength);

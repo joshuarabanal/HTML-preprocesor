@@ -9,7 +9,9 @@ public class Attribute implements NameValuePair {
         public Attribute(String name, String value){
             this();
             setName(name);
-            setValue(value);
+            if(value != null && value.length()>0) {
+            	setValue(value);
+            }
         }
 	public Attribute(){
 		
