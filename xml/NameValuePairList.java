@@ -1,6 +1,7 @@
 package xml;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import Analytics.CrashReporter;
 import xml.unoptimized.NameValuePair;

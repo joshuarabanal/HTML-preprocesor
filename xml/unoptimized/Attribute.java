@@ -8,9 +8,9 @@ public class Attribute implements NameValuePair {
 	private String value;
         public Attribute(String name, String value){
             this();
-            setName(name);
+            setName(name.trim());
             if(value != null && value.length()>0) {
-            	setValue(value);
+            	setValue(value.trim());
             }
         }
 	public Attribute(){
@@ -29,7 +29,7 @@ public class Attribute implements NameValuePair {
 		this.name = name.trim();
 	}
 	public void setValue(String val){
-		val = val.trim();
+		//val = val.trim();//this is causing unexpected behavior
 		if(
 				(val.charAt(0) == '"' && val.charAt(val.length()-1) == '"')
 				||
@@ -64,7 +64,7 @@ public class Attribute implements NameValuePair {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return " "+name+"="+value+" ";
+		return "\""+name+"\"=\""+value+"\"";
 	}
 
 }
