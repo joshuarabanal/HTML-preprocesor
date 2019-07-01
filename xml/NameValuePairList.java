@@ -6,41 +6,32 @@ import java.util.Iterator;
 import Analytics.CrashReporter;
 import xml.unoptimized.NameValuePair;
 
-public class NameValuePairList {
-    private ArrayList<NameValuePair> nvps;
+public class NameValuePairList  extends ArrayList<xml.NameValuePairList.NameValuePair>{
+    //private ArrayList<NameValuePair> nvps;
     private String[] values;
     public NameValuePairList(String[] allPossibleValues){
         values = allPossibleValues;
-        nvps = new ArrayList<NameValuePair>();
+        //nvps = new ArrayList<NameValuePair>();
     }
     public NameValuePairList() {
     	this(new String[] {});
     }
 
-    public void clear(){
-        nvps.clear();
-    }
-    public xml.unoptimized.NameValuePair remove(int index){
-        return nvps.remove(index);
-    }
-    public int size(){
-        return nvps.size();
-    }
-    public xml.unoptimized.NameValuePair get(int i){
-        return nvps.get(i);
-    }
+   
+    
+    
     public String getAttributeValue(int nameIndex){
-        for(int i = 0; i<nvps.size(); i++){
-            if(nvps.get(i).name  == nameIndex){//if the nvp has no name index the name index will be -1
-                return nvps.get(i).getValue();
+        for(NameValuePair nvp : this){
+            if(nvp.name  == nameIndex){//if the nvp has no name index the name index will be -1
+                return nvp.getValue();
             }
         }
         return null;
     }
     public String getAttributeValue(String name){
-        for(int i = 0; i<nvps.size(); i++){
-            if(nvps.get(i).getName().equals(name)){
-                return nvps.get(i).getValue();
+        for(int i = 0; i<size(); i++){
+            if(get(i).getName().equals(name)){
+                return get(i).getValue();
             }
         }
         return null;
@@ -49,10 +40,10 @@ public class NameValuePairList {
         this.add(new NameValuePair(name,value));
     }
     public void add(xml.unoptimized.NameValuePair nvp){
-        nvps.add(new NameValuePair(nvp.getName(), nvp.getValue()));
+        add(new NameValuePair(nvp.getName(), nvp.getValue()));
     }
     public void add(String name, String value){
-        nvps.add(new NameValuePair(name, value));
+        add(new NameValuePair(name, value));
     }
     public void add(byte[] buffer, int nameStart, int nameLength, int valueStart, int valueLength){
         int nameIndex = getIndex(buffer, nameStart,nameLength);
@@ -61,10 +52,10 @@ public class NameValuePairList {
             if(nameIndex ==-1 && valueIndex == -1){
                 String nameString = new String(buffer, nameStart, nameLength);
                 String valueString = new String(buffer, valueStart, valueLength);
-                nvps.add(new NameValuePair(nameString,valueString));
+                add(new NameValuePair(nameString,valueString));
             }
             else if(valueIndex == -1){
-                nvps.add(
+                add(
                         new NameValuePair(
                                 nameIndex,
                                 new String(buffer, valueStart,valueLength)
@@ -72,7 +63,7 @@ public class NameValuePairList {
                 );
             }
             else if(nameIndex ==-1){
-                nvps.add(
+                add(
                         new NameValuePair(
                             new String(buffer, nameStart,nameLength),
                             valueIndex
@@ -81,7 +72,7 @@ public class NameValuePairList {
             }
         }
         else{
-            nvps.add(
+            add(
                     new NameValuePair(nameIndex, valueIndex)
             );
         }
@@ -107,8 +98,8 @@ public class NameValuePairList {
 
     public String toString() {
     	String retu = "{";
-    	for(int i = 0; i<nvps.size(); i++) {
-    		retu += nvps.get(i)+",";
+    	for(int i = 0; i<size(); i++) {
+    		retu += get(i)+",";
     	}
     	return retu +"}";
     }
